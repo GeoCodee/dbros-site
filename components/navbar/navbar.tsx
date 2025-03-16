@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Button,
   Dropdown,
@@ -5,6 +6,7 @@ import {
   Navbar,
   Switch,
   Text,
+  Modal,
 } from "@nextui-org/react";
 import { ModalLogin } from "../modal";
 import { icons } from "./icons";
@@ -12,16 +14,17 @@ import { AcmeLogo, DbrosLogo } from "./logo";
 import { useTheme as useNextTheme } from "next-themes";
 import { useTheme } from "@nextui-org/react";
 import { GithubIcon } from "../icons/GithubIcon";
-import { navItems } from "../../models/navbarInfo";
+import { contactInfo, navItems } from "../../models/navbarInfo";
 
 export const Nav = () => {
   const { setTheme } = useNextTheme();
   const { isDark, type } = useTheme();
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   const collapseItems = [
-    //  "Features",
-    //  "Customers",
-    //  "Pricing",
+    // "Features",
+    // "Customers",
+    // "Pricing",
     "Company",
     "Legal",
   ];
@@ -41,131 +44,51 @@ export const Nav = () => {
       <Navbar.Brand>
         <Navbar.Toggle aria-label="toggle navigation" showIn="xs" />
         <DbrosLogo></DbrosLogo>
-        {/* <Text b color="inherit" hideIn="xs">
-               ACME
-            </Text> */}
         <Navbar.Content
           hideIn="sm"
           css={{
             pl: "1rem",
           }}
         >
-          {/* <Dropdown isBordered>
-            <Navbar.Item>
-              <Dropdown.Button
-                auto
-                light
-                css={{
-                  px: 0,
-                  dflex: "center",
-                  svg: { pe: "none" },
-                }}
-                iconRight={icons.chevron}
-                ripple={false}
-              >
-                Features
-              </Dropdown.Button>
-            </Navbar.Item>
-            <Dropdown.Menu
-                     aria-label="ACME features"
-                     css={{
-                        '$$dropdownMenuWidth': '340px',
-                        '$$dropdownItemHeight': '70px',
-                        '& .nextui-dropdown-item': {
-                           'py': '$4',
-                           'svg': {
-                              color: '$secondary',
-                              mr: '$4',
-                           },
-                           '& .nextui-dropdown-item-content': {
-                              w: '100%',
-                              fontWeight: '$semibold',
-                           },
-                        },
-                     }}
-                  >
-                     <Dropdown.Item
-                        key="autoscaling"
-                        showFullDescription
-                        description="ACME scales apps to meet user demand, automagically, based on load."
-                        icon={icons.scale}
-                     >
-                        Autoscaling
-                     </Dropdown.Item>
-                     <Dropdown.Item
-                        key="usage_metrics"
-                        showFullDescription
-                        description="Real-time metrics to debug issues. Slow query added? We’ll show you exactly where."
-                        icon={icons.activity}
-                     >
-                        Usage Metrics
-                     </Dropdown.Item>
-                     <Dropdown.Item
-                        key="production_ready"
-                        showFullDescription
-                        description="ACME runs on ACME, join us and others serving requests at web scale."
-                        icon={icons.flash}
-                     >
-                        Production Ready
-                     </Dropdown.Item>
-                     <Dropdown.Item
-                        key="99_uptime"
-                        showFullDescription
-                        description="Applications stay on the grid with high availability and high uptime guarantees."
-                        icon={icons.server}
-                     >
-                        +99% Uptime
-                     </Dropdown.Item>
-                     <Dropdown.Item
-                        key="supreme_support"
-                        showFullDescription
-                        description="Overcome any challenge with a supporting team ready to respond."
-                        icon={icons.user}
-                     >
-                        +Supreme Support
-                     </Dropdown.Item>
-                  </Dropdown.Menu>
-          </Dropdown> */}
-          {/* <Navbar.Link isActive href="#">
-            Customers
-          </Navbar.Link>
-          <Navbar.Link href="#">Pricing</Navbar.Link>
-          <Navbar.Link href="#">Company</Navbar.Link> */}
-
-          {navItems.map((item, index) => (
-            <Navbar.Link key={index} href={item.path}>
-              {item.name}
-            </Navbar.Link>
-          ))}
+          {navItems.map((item, index) =>
+            item.name === "Contact Us" ? (
+              <Navbar.Item key={index}>
+                <Link
+                  css={{ cursor: "pointer" }}
+                  onPress={() => setIsContactModalOpen(true)}
+                >
+                  {item.name}
+                </Link>
+              </Navbar.Item>
+            ) : (
+              <Navbar.Link key={index} href={item.path}>
+                {item.name}
+              </Navbar.Link>
+            )
+          )}
         </Navbar.Content>
       </Navbar.Brand>
 
       <Navbar.Collapse>
-        {navItems.map((item, index) => (
-          <Navbar.CollapseItem key={index}>
-            <Link
-              color="inherit"
-              css={{
-                minWidth: "100%",
-              }}
-              href={item.path}
-            >
-              {item.name}
-            </Link>
-          </Navbar.CollapseItem>
-        ))}
-        <Navbar.CollapseItem>
-          {/* <Link
-            color="inherit"
-            css={{
-              minWidth: "100%",
-            }}
-            target="_blank"
-            href="https://github.com/Siumauricio/landing-template-nextui"
-          >
-            <GithubIcon />
-          </Link> */}
-        </Navbar.CollapseItem>
+        {navItems.map((item, index) =>
+          item.name === "Contact Us" ? (
+            <Navbar.CollapseItem key={index}>
+              <Link
+                color="inherit"
+                css={{ minWidth: "100%", cursor: "pointer" }}
+                onPress={() => setIsContactModalOpen(true)}
+              >
+                {item.name}
+              </Link>
+            </Navbar.CollapseItem>
+          ) : (
+            <Navbar.CollapseItem key={index}>
+              <Link color="inherit" css={{ minWidth: "100%" }} href={item.path}>
+                {item.name}
+              </Link>
+            </Navbar.CollapseItem>
+          )
+        )}
         <Navbar.CollapseItem>
           <Switch
             checked={isDark}
@@ -174,24 +97,6 @@ export const Nav = () => {
         </Navbar.CollapseItem>
       </Navbar.Collapse>
       <Navbar.Content>
-        {/* <ModalLogin />
-        <Navbar.Item>
-          <Button auto flat href="#">
-            Start free trial
-          </Button>
-        </Navbar.Item>
-        <Navbar.Item hideIn={"xs"}>
-          <Link
-            color="inherit"
-            css={{
-              minWidth: "100%",
-            }}
-            target="_blank"
-            href="https://github.com/Siumauricio/landing-template-nextui"
-          >
-            <GithubIcon />
-          </Link>
-        </Navbar.Item> */}
         <Navbar.Item hideIn={"xs"}>
           <Switch
             checked={isDark}
@@ -199,6 +104,25 @@ export const Nav = () => {
           />
         </Navbar.Item>
       </Navbar.Content>
+
+      {/* Contact Information Modal */}
+      <Modal
+        open={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
+      >
+        <Modal.Header>
+          <Text h4>Contact Us</Text>
+        </Modal.Header>
+        <Modal.Body>
+          <Text>Phone: {contactInfo.phone}</Text>
+          <Text>Email: {contactInfo.email}</Text>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button auto flat onPress={() => setIsContactModalOpen(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Navbar>
   );
 };
