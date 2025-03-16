@@ -36,6 +36,9 @@ importers:
       '@types/node':
         specifier: 18.7.18
         version: 18.7.18
+      '@types/nodemailer':
+        specifier: ^6.4.17
+        version: 6.4.17
       '@types/react':
         specifier: 18.0.20
         version: 18.0.20
@@ -644,6 +647,9 @@ packages:
 
   '@types/node@18.7.18':
     resolution: {integrity: sha512-m+6nTEOadJZuTPkKR/SYK3A2d7FZrgElol9UP1Kae90VVU4a6mxnPuLiIW1m4Cq4gZ/nWb9GrdVXJCoCazDAbg==}
+
+  '@types/nodemailer@6.4.17':
+    resolution: {integrity: sha512-I9CCaIp6DTldEg7vyUTZi8+9Vo0hi1/T8gv3C89yk1rSAAzoKQ8H8ki/jBYJSFoH/BisgLP8tkZMlQ91CIquww==}
 
   '@types/prop-types@15.7.14':
     resolution: {integrity: sha512-gNMvNH49DJ7OJYv+KAKn0Xp45p8PLl6zo2YnvDIbTd4J6MER2BmWN49TG7n9LvkyihINxeKW8+3bfS2yDC9dzQ==}
@@ -2845,6 +2851,10 @@ snapshots:
   '@types/json5@0.0.29': {}
 
   '@types/node@18.7.18': {}
+
+  '@types/nodemailer@6.4.17':
+    dependencies:
+      '@types/node': 18.7.18
 
   '@types/prop-types@15.7.14': {}
 
