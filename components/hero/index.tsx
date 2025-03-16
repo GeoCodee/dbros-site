@@ -175,7 +175,7 @@ export const Hero = () => {
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={handleSubmit}>
-            <Flex direction="column" gap="$4">
+            <Flex direction="column" gap="4">
               <Input
                 label="First Name"
                 placeholder="John"
