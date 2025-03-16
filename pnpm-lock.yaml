@@ -20,6 +20,9 @@ importers:
       next-themes:
         specifier: ^0.2.1
         version: 0.2.1(next@15.2.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      nodemailer:
+        specifier: ^6.10.0
+        version: 6.10.0
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -1573,6 +1576,10 @@ packages:
         optional: true
       sass:
         optional: true
+
+  nodemailer@6.10.0:
+    resolution: {integrity: sha512-SQ3wZCExjeSatLE/HBaXS5vqUOQk6GtBdIIKxiFdmm01mOQZX/POJkO3SUX1wDiYcwUOJwT23scFSC9fY2H8IA==}
+    engines: {node: '>=6.0.0'}
 
   nwsapi@2.2.18:
     resolution: {integrity: sha512-p1TRH/edngVEHVbwqWnxUViEmq5znDvyB+Sik5cmuLpGOIfDf/39zLiq3swPF8Vakqn+gvNiOQAZu8djYlQILA==}
@@ -3311,7 +3318,7 @@ snapshots:
       eslint: 8.23.1
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 2.7.1(eslint-plugin-import@2.31.0(eslint@8.23.1))(eslint@8.23.1)
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.23.1)(typescript@4.8.3))(eslint-import-resolver-typescript@2.7.1)(eslint@8.23.1)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.23.1)(typescript@4.8.3))(eslint-import-resolver-typescript@2.7.1(eslint-plugin-import@2.31.0(eslint@8.23.1))(eslint@8.23.1))(eslint@8.23.1)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@8.23.1)
       eslint-plugin-react: 7.37.4(eslint@8.23.1)
       eslint-plugin-react-hooks: 4.6.2(eslint@8.23.1)
@@ -3333,7 +3340,7 @@ snapshots:
     dependencies:
       debug: 4.4.0
       eslint: 8.23.1
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.23.1)(typescript@4.8.3))(eslint-import-resolver-typescript@2.7.1)(eslint@8.23.1)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.23.1)(typescript@4.8.3))(eslint-import-resolver-typescript@2.7.1(eslint-plugin-import@2.31.0(eslint@8.23.1))(eslint@8.23.1))(eslint@8.23.1)
       glob: 7.2.3
       is-glob: 4.0.3
       resolve: 1.22.10
@@ -3352,7 +3359,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.23.1)(typescript@4.8.3))(eslint-import-resolver-typescript@2.7.1)(eslint@8.23.1):
+  eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.23.1)(typescript@4.8.3))(eslint-import-resolver-typescript@2.7.1(eslint-plugin-import@2.31.0(eslint@8.23.1))(eslint@8.23.1))(eslint@8.23.1):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.8
@@ -4022,6 +4029,8 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
+
+  nodemailer@6.10.0: {}
 
   nwsapi@2.2.18: {}
 
