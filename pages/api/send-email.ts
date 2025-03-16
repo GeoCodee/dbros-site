@@ -1,14 +1,27 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import nodemailer from "nodemailer";
 
+// Verify required environment variables
+const verifyEnv = () => {
+  const required = ["SMTP_EMAIL", "SMTP_PASSWORD", "SMTP_EMAIL_RECEIVER"];
+  const missing = required.filter((key) => !process.env[key]);
+  if (missing.length > 0) {
+    throw new Error(`Missing env vars: ${missing.join(", ")}`);
+  }
+};
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === "POST") {
-    const { type, ...formData } = req.body;
+  try {
+    verifyEnv();
 
-    // Configure Nodemailer
+    if (req.method !== "POST") {
+      return res.status(405).json({ message: "Method not allowed" });
+    }
+
+    const { type, ...formData } = req.body;
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -17,53 +30,51 @@ export default async function handler(
       },
     });
 
-    try {
-      let emailContent;
-      const baseSubject = "New Request - DBros Twins Cleaning";
+    // Verify SMTP connection
+    await transporter.verify();
 
-      switch (type) {
-        case "consultation":
-          emailContent = {
-            subject: `${baseSubject} (Consultation)`,
-            text: `Consultation Request Details:
-              First Name: ${formData.firstName}
-              Last Name: ${formData.lastName}
-              Email: ${formData.email}
-              Phone: ${formData.phone}
-            `,
-          };
-          break;
+    const baseSubject = "New Request - DBros Twins Cleaning";
+    let emailContent;
 
-        case "package":
-          emailContent = {
-            subject: `${baseSubject} (${formData.package} Package)`,
-            text: `Package Signup Details:
-              Package: ${formData.package}
-              First Name: ${formData.firstName}
-              Last Name: ${formData.lastName}
-              Email: ${formData.email}
-              Phone: ${formData.phone}
-            `,
-          };
-          break;
-
-        default:
-          return res.status(400).json({ message: "Invalid request type" });
-      }
-
-      await transporter.sendMail({
-        from: process.env.SMTP_EMAIL,
-        to: process.env.SMTP_EMAIL_RECEIVER,
-        subject: emailContent.subject,
-        text: emailContent.text,
-      });
-
-      res.status(200).json({ message: "Email sent successfully" });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Error sending email" });
+    switch (type) {
+      case "consultation":
+        emailContent = {
+          subject: `${baseSubject} (Consultation)`,
+          text: `Consultation Details:\n${Object.entries(formData)
+            .map(([key, val]) => `${key}: ${val}`)
+            .join("\n")}`,
+        };
+        break;
+      case "package":
+        emailContent = {
+          subject: `${baseSubject} (${formData.package} Package)`,
+          text: `Package Details:\nPackage: ${
+            formData.package
+          }\n${Object.entries(formData)
+            .filter(([key]) => key !== "package")
+            .map(([key, val]) => `${key}: ${val}`)
+            .join("\n")}`,
+        };
+        break;
+      default:
+        return res.status(400).json({ message: "Invalid request type" });
     }
-  } else {
-    res.status(405).json({ message: "Method not allowed" });
+
+    const info = await transporter.sendMail({
+      from: `"DBros Contact Form" <${process.env.SMTP_EMAIL}>`,
+      to: process.env.SMTP_EMAIL_RECEIVER,
+      subject: emailContent.subject,
+      text: emailContent.text,
+      html: emailContent.text.replace(/\n/g, "<br>"),
+    });
+
+    console.log("Email sent:", info.messageId);
+    return res.status(200).json({ message: "Email sent successfully" });
+  } catch (error) {
+    console.error("Full error:", error);
+    return res.status(500).json({
+      message: "Error sending email",
+      error: error instanceof Error ? error.message : "Unknown error occurred",
+    });
   }
 }
