@@ -10,7 +10,7 @@ export interface contactInfoItems {
 
 export const contactInfo: contactInfoItems = {
   phone: "647-569-6113",
-  email: "Info@dbrostwins.ca",
+  email: "Info@dbrostwins.com",
 };
 
 export const navItems: navItem[] = [

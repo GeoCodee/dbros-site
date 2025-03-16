@@ -6,7 +6,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
-    const { firstName, lastName, email, phone } = req.body;
+    const { type, ...formData } = req.body;
 
     // Configure Nodemailer
     const transporter = nodemailer.createTransport({
@@ -18,16 +18,44 @@ export default async function handler(
     });
 
     try {
+      let emailContent;
+      const baseSubject = "New Request - DBros Twins Cleaning";
+
+      switch (type) {
+        case "consultation":
+          emailContent = {
+            subject: `${baseSubject} (Consultation)`,
+            text: `Consultation Request Details:
+              First Name: ${formData.firstName}
+              Last Name: ${formData.lastName}
+              Email: ${formData.email}
+              Phone: ${formData.phone}
+            `,
+          };
+          break;
+
+        case "package":
+          emailContent = {
+            subject: `${baseSubject} (${formData.package} Package)`,
+            text: `Package Signup Details:
+              Package: ${formData.package}
+              First Name: ${formData.firstName}
+              Last Name: ${formData.lastName}
+              Email: ${formData.email}
+              Phone: ${formData.phone}
+            `,
+          };
+          break;
+
+        default:
+          return res.status(400).json({ message: "Invalid request type" });
+      }
+
       await transporter.sendMail({
         from: process.env.SMTP_EMAIL,
-        to: process.env.SMTP_EMAIL,
-        subject: "New Consultation Request",
-        text: `
-            First Name: ${firstName}
-            Last Name: ${lastName}
-            Email: ${email}
-            Phone: ${phone}
-          `,
+        to: process.env.SMTP_EMAIL_RECEIVER,
+        subject: emailContent.subject,
+        text: emailContent.text,
       });
 
       res.status(200).json({ message: "Email sent successfully" });

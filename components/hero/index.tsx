@@ -32,25 +32,38 @@ export const Hero = () => {
       const response = await fetch("/api/send-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ firstName, lastName, email, phone }),
+        body: JSON.stringify({
+          type: "consultation",
+          firstName,
+          lastName,
+          email,
+          phone,
+        }),
       });
 
-      if (response.ok) {
-        setSuccessMessage(
-          "Consultation requested successfully! We will contact you shortly"
-        );
-        setTimeout(() => {
-          setIsModalOpen(false);
-          setFirstName("");
-          setLastName("");
-          setEmail("");
-          setPhone("");
-        }, 2000);
-      } else {
-        setErrorMessage("Failed to send request. Please try again.");
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to send request");
       }
+
+      setSuccessMessage(
+        "Consultation requested successfully! We will contact you shortly"
+      );
+      setTimeout(() => {
+        setIsModalOpen(false);
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setPhone("");
+      }, 2000);
     } catch (error) {
-      setErrorMessage("An error occurred. Please try again later.");
+      console.error("Submission error:", error);
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "An error occurred. Please try again later."
+      );
     } finally {
       setLoading(false);
     }
