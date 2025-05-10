@@ -13,6 +13,7 @@ import {Plans} from '../components/plans';
 import {Faq} from '../components/faq';
 import {Trial} from '../components/trial';
 import {Footer} from '../components/footer';
+import { MaintenancePlans } from '../components/maintenancePlans';
 
 const Home: NextPage = () => {
    return (
@@ -20,6 +21,7 @@ const Home: NextPage = () => {
          <Nav />
          <Box as="main">
             <Hero />
+            <MaintenancePlans/>
             <Plans />
             {/* <Features1 /> */}
             {/* <Features2 /> */}
