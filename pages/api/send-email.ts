@@ -56,6 +56,24 @@ export default async function handler(
             .join("\n")}`,
         };
         break;
+      case "booking":
+        emailContent = {
+          subject: `${baseSubject} (Booking)`,
+          text: `New Booking from ${formData.firstName} ${formData.lastName}`,
+          html: `
+              <h2>New Booking Request</h2>
+              <table style="border-collapse: collapse; width: 100%; font-family: Arial, sans-serif;">
+                <tr><td style="padding: 8px; font-weight: bold;">Date:</td><td style="padding: 8px;">${formData.date}</td></tr>
+                <tr><td style="padding: 8px; font-weight: bold;">Time:</td><td style="padding: 8px;">${formData.time}</td></tr>
+                <tr><td style="padding: 8px; font-weight: bold;">Name:</td><td style="padding: 8px;">${formData.firstName} ${formData.lastName}</td></tr>
+                <tr><td style="padding: 8px; font-weight: bold;">Email:</td><td style="padding: 8px;">${formData.email}</td></tr>
+                <tr><td style="padding: 8px; font-weight: bold;">Phone:</td><td style="padding: 8px;">${formData.phone}</td></tr>
+              </table>
+              <p style="font-size: 0.9em; color: #666;">Sent automatically from the DBros Booking Form</p>
+            `,
+        };
+        break;
+
       default:
         return res.status(400).json({ message: "Invalid request type" });
     }
@@ -65,7 +83,7 @@ export default async function handler(
       to: process.env.SMTP_EMAIL_RECEIVER,
       subject: emailContent.subject,
       text: emailContent.text,
-      html: emailContent.text.replace(/\n/g, "<br>"),
+      html: emailContent.html || emailContent.text.replace(/\n/g, "<br>"),
     });
 
     console.log("Email sent:", info.messageId);

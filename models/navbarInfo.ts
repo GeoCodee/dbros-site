@@ -22,4 +22,8 @@ export const navItems: navItem[] = [
   //     name: "About",
   //     path: "/About",
   //   },
+  {
+    name:"Booking",
+    path:"Booking"
+  }
 ];
